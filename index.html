@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BCN EdgeAI Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+    #map { flex: 1; width: 100%; }
+    #details { height: 250px; background: white; padding: 20px; border-top: 2px solid #333; overflow-y: auto; }
+    .status-ok { color: green; }
+    .status-alert { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div id="details">
+    <h2 id="node-name">Click on a sensor</h2>
+    <div id="data-content" style="display: none;">
+      <p>🌡️ Temperatura: <span id="val-temp">-</span> ºC</p>
+      <p>💧 Humitat: <span id="val-hum">-</span> %</p>
+      <p>🌬️ Vent: <span id="val-wind">-</span> km/h</p>
+      <p>☁️ Qualitat Aire (NOx): <span id="val-air">-</span> %</p>
+      <p><small>Última actualització: <span id="val-time">-</span></small></p>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
