@@ -1,6 +1,6 @@
-const fs = require('fs');
+/*const fs = require('fs');*/
 
-const generateP2PInput = () => {
+const generateMockData = () => {
     const getRandomInRange = (min, max, decimals = 1) => 
         parseFloat((Math.random() * (max - min) + min).toFixed(decimals));
 
@@ -25,6 +25,7 @@ const generateP2PInput = () => {
 
     // 3. Retornamos el objeto con los valores ya listos
     return {
+        peerId:'emisor-arduino-1', // Afegit perquè el teu emisor el demanava
         timestamp: Date.now(),
         location: {
             lat: getRandomInRange(41.3800, 41.4000, 4), 
@@ -38,8 +39,10 @@ const generateP2PInput = () => {
     };
 };
 
-const sendDataToNetwork = () => {
-    const sensorData = generateP2PInput(); 
+module.exports = { generateMockData };
+
+/*const sendDataToNetwork = () => {
+    const sensorData = generateMockData(); 
     
     // Simulem l'enviament P2P
     // myP2PNode.broadcast(JSON.stringify(sensorData)); 
@@ -49,7 +52,4 @@ const sendDataToNetwork = () => {
     fs.appendFileSync('dataset.json', JSON.stringify(sensorData) + "\n"); 
     
     console.log("Dato enviado y guardado a las:", sensorData.timestamp);
-};
-
-// Per provar-ho, cridem la funció:
-sendDataToNetwork();
+};*/

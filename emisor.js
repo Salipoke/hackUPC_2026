@@ -3,11 +3,13 @@ const Corestore = require('corestore');
 const Autobase = require('autobase');
 const Hyperswarm = require('hyperswarm');
 
+const { generateMockData } = require('./helper.js');
+
 function getRandomInRange(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function generateMockData() {
+/*function generateMockData() {
   const now = Date.now();
   return {
     peerId: 'emisor-arduino-1',
@@ -21,7 +23,7 @@ function generateMockData() {
     light: getRandomInRange(100, 1000),
     airQuality: getRandomInRange(20, 95)
   };
-}
+}*/
 
 async function iniciarNodo() {
   const store = new Corestore('./datos-biomesh-emisor');
