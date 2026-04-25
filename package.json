@@ -1,20 +1,27 @@
 {
   "name": "hackupc_2026",
   "version": "1.0.0",
-  "description": "P2P natural preservation Network",
-  "homepage": "https://github.com/Salipoke/hackUPC_2026#readme",
-  "bugs": {
-    "url": "https://github.com/Salipoke/hackUPC_2026/issues"
+  "description": "Kirk67_LaNoticia_Covers_48_nixOS's hackUPC's project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Salipoke/hackUPC_2026.git"
   },
-  "license": "MIT",
-  "author": "FiberGang",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bugs": {
+    "url": "https://github.com/Salipoke/hackUPC_2026/issues"
+  },
+  "homepage": "https://github.com/Salipoke/hackUPC_2026#readme",
+  "dependencies": {
+    "autobase": "^7.27.3",
+    "bare-process": "^4.4.1",
+    "corestore": "^7.9.2",
+    "hyperdht": "^6.30.0"
   }
 }
