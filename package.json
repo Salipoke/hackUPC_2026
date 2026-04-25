@@ -4,6 +4,8 @@
   "description": "Kirk67_LaNoticia_Covers_48_nixOS's hackUPC's project",
   "main": "index.js",
   "scripts": {
+    "emisor": "pear run emisor.js",
+    "observador": "pear run observador.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,8 +23,10 @@
   "dependencies": {
     "autobase": "^7.27.3",
     "bare-process": "^4.4.1",
+    "bare-ws": "^2.1.0",
     "corestore": "^7.9.2",
     "hyperdht": "^6.30.0",
+    "hyperswarm": "^4.17.0",
     "ws": "^8.20.0"
   }
 }

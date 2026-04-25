@@ -1,45 +1,60 @@
 const DHT = require('hyperdht');
-const process = require('bare-process');
 const Corestore = require('corestore');
 const Autobase = require('autobase');
+const Hyperswarm = require('hyperswarm');
+
+function getRandomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function generateMockData() {
+  const now = Date.now();
+  return {
+    peerId: 'emisor-arduino-1',
+    timestamp: now,
+    location: [41.3879, 2.1699],
+    lat: 41.3879,
+    lng: 2.1699,
+    temperature: getRandomInRange(18, 32),
+    humidity: getRandomInRange(30, 80),
+    wind: getRandomInRange(0, 25),
+    light: getRandomInRange(100, 1000),
+    airQuality: getRandomInRange(20, 95)
+  };
+}
 
 async function iniciarNodo() {
-  // 1. Inicializar Corestore (Almacenamiento local)
   const store = new Corestore('./datos-biomesh-emisor');
 
-  // 2. Definir la función determinista apply()
-  // Esta función procesa el historial inmutable linealizado de la red 
   async function apply(nodes, view, host) {
     for (const node of nodes) {
-      console.log('Historial P2P actualizado:', node.value.toString());
+      if (node.value.addWriter) {
+        console.log('EMISOR: Añadiendo writer');
+        await host.addWriter(node.value.addWriter, { isIndexer: true });
+      }
     }
   }
 
-  // Envolver Corestore con Autobase 
+  // IMPORTANTE: null = crear NUEVA base, el emisor será el primer writer
   const base = new Autobase(store, null, { apply });
   await base.ready();
-  console.log('Clave Autobase (Copia esto también):', base.key.toString('hex'));
+  console.log('=== KEY:', base.key.toString('hex'), '===');
+  console.log('Writable:', base.writable);
 
-  const node = new DHT();
-  const server = node.createServer();
-
-  server.on('connection', function (socket) {
-    console.log('¡Conexión P2P establecida! Sincronizando base de datos...');
-    // Replicamos la base de datos a través del túnel seguro 
+  const swarm = new Hyperswarm();
+  swarm.join(base.discoveryKey);
+  
+  swarm.on('connection', (socket) => {
+    console.log('EMISOR: peer conectado');
     store.replicate(socket);
   });
 
-  const keyPair = DHT.keyPair();
-  await server.listen(keyPair);
-  
-  console.log('Arduino esperando conexiones P2P...');
-  console.log('Clave Pública (Copia esto):', keyPair.publicKey.toString('hex'));
-
-  // Inyección de alertas falsas (Simulando el modelo de IA)
   setInterval(async () => {
-     const alerta = `ALERTA AMBIENTAL: Temperatura crítica detectada a las ${new Date().toLocaleTimeString()}`;
-     await base.append(alerta); // Agrega el evento a la cadena 
-     console.log('Evento inyectado localmente.');
+    if (base.writable) {
+      const data = generateMockData();
+      await base.append(JSON.stringify(data));
+      console.log('>>> ENVIADO:', data.temperature.toFixed(1), '°C');
+    }
   }, 10000);
 }
 
