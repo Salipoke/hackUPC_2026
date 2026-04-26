@@ -206,11 +206,11 @@ Auto-detected: if `/dev/ttyACM0` unavailable, uses console output.
 
 | Document | Description |
 |----------|-------------|
-| [`ARQUITECTURA_P2P.md`](ARQUITECTURA_P2P.md) | P2P stack architecture |
-| [`FLUJO_DE_EJECUCION.md`](FLUJO_DE_EJECUCION.md) | Execution flow protocol |
-| [`AI_IMPLEMENTATION.md`](AI_IMPLEMENTATION.md) | AI model implementation (V2) |
-| [`AI_ROADMAP.md`](AI_ROADMAP.md) | Feature roadmap |
-| [`MANUAL_TESTING.md`](MANUAL_TESTING.md) | Testing guide |
+| [`Documentation/ARQUITECTURA_P2P.md`](Documentation/ARQUITECTURA_P2P.md) | P2P stack architecture |
+| [`Documentation/FLUJO_DE_EJECUCION.md`](Documentation/FLUJO_DE_EJECUCION.md) | Execution flow protocol |
+| [`Documentation/AI_IMPLEMENTATION.md`](Documentation/AI_IMPLEMENTATION.md) | AI model implementation (V2) |
+| [`Documentation/AI_ROADMAP.md`](Documentation/AI_ROADMAP.md) | Feature roadmap |
+| [`Documentation/MANUAL_TESTING.md`](Documentation/MANUAL_TESTING.md) | Testing guide |
 
 ---
 
