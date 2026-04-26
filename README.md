@@ -68,3 +68,50 @@ Lanza 3 emisores + observador + dashboard. Abre **http://localhost:5173**.
 - [`MANUAL_TESTING.md`](MANUAL_TESTING.md) — Guía completa de testing
 - [`ARQUITECTURA_P2P.md`](ARQUITECTURA_P2P.md) — Arquitectura P2P
 - [`FLUJO_DE_EJECUCION.md`](FLUJO_DE_EJECUCION.md) — Flujo de ejecución
+
+## AI Risk Classifier (EdgeAI)
+
+El sistema incluye un clasificador de riesgo entrenado con TensorFlow.js que evalúa las lecturas de sensores.
+
+```bash
+# Generar dataset (siemnpre necesario antes de entrenar)
+npm run dataset:real
+
+# Entrenar modelo
+npm run train
+
+# Verificar modelo
+npm run verify-model
+```
+
+**Modelo**: MLP 5→16→8→1 (~250 parámetros, ~2.5 KB)
+- Accuracy: ~98% validación
+- Latencia: < 1ms hot path
+
+### Fallback
+
+Si el modelo tfjs no carga, usa heurística de umbrales (definido en `ai/decision-threshold.js`).
+
+## LED Actuator
+
+Cuando el consenso alcanza el umbral (≥2/3 emisores = HIGH), se activa el actuador:
+
+```bash
+# Test manual
+node scripts/actuator-led.js on    # patrón alerta
+node scripts/actuator-led.js off   # patrón seguro
+node scripts/actuator-led.js flash # animación
+```
+
+**Modos**:
+- **UNO Q real**: conexión serial a STM32 → matriz LED 8x13
+- **PC mock**: mensaje en consola
+
+El actuador detecta automáticamente el hardware. Si no hay `/dev/ttyACM0`, usa console alerts. Si hay hardware, envía comando RPC al STM32.
+
+## Hardware UNO Q (futuro)
+
+1. Conectar Arduino UNO Q por USB-C
+2. Instalar `serialport`: `npm install serialport`
+3. Ejecutar emisor en la placa: `pear run emisor.js emisor-arduino-1`
+4. El LED se sincroniza automáticamente con el consenso

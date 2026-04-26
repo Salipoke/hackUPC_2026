@@ -96,7 +96,7 @@ async function iniciarNodo() {
       const data = generateMockData(PEER_ID);
 
       // Phase 1: AI verdict on own reading
-      data.verdict = ai.evaluate(data, selfHistory);
+      data.verdict = await ai.evaluate(data, selfHistory);
 
       selfHistory.push(data);
       if (selfHistory.length > HISTORY_LIMIT) selfHistory.shift();

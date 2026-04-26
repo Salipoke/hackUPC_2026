@@ -18,6 +18,12 @@
     "clean": "rm -rf datos-biomesh-* /tmp/biomesh-derive-*",
     "dataset": "node scripts/generate-dataset.js",
     "dataset:real": "BIOMESH_FETCH_OPENMETEO=1 node scripts/generate-dataset.js",
+    "train": "node ai/runtime/train.js",
+    "verify-model": "node scripts/verify-model.js",
+    "led": "node scripts/actuator-led.js",
+    "led:on": "node scripts/actuator-led.js on",
+    "led:off": "node scripts/actuator-led.js off",
+    "led:flash": "node scripts/actuator-led.js flash",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,6 +39,7 @@
   },
   "homepage": "https://github.com/Salipoke/hackUPC_2026#readme",
   "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
     "autobase": "^7.27.3",
     "bare-process": "^4.4.1",
     "bare-ws": "^2.1.0",
@@ -40,5 +47,11 @@
     "hyperdht": "^6.30.0",
     "hyperswarm": "^4.17.0",
     "ws": "^8.20.0"
+  },
+  "optionalDependencies": {
+    "serialport": "^11.0.0"
+  },
+  "devDependencies": {
+    "@tensorflow/tfjs-node": "^4.22.0"
   }
 }

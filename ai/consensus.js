@@ -14,6 +14,18 @@
  *   triggerEvent(reason): placeholder for the physical action (LED / log / actuator).
  */
 
+let ledModule = null;
+function getLed() {
+  if (!ledModule) {
+    try {
+      ledModule = require('../scripts/actuator-led');
+    } catch (e) {
+      console.warn('[consensus] LED module not available:', e.message);
+    }
+  }
+  return ledModule;
+}
+
 /**
  * Decide if collective action must fire.
  *
@@ -65,7 +77,9 @@ function shouldTrigger(entries, totalPeers, opts = {}) {
  *
  * @param {object} ctx - {peerId, verdicts, decision}
  */
-function triggerEvent(ctx) {
+async function triggerEvent(ctx) {
+  const led = getLed();
+
   const banner = '!!! BIOMESH ALERT !!!';
   console.log('\n' + '='.repeat(60));
   console.log(banner);
@@ -74,6 +88,15 @@ function triggerEvent(ctx) {
   console.log(`Threshold:   ${ctx.decision.threshold}`);
   console.log(`Action:      ENVIRONMENTAL MITIGATION (placeholder)`);
   console.log('='.repeat(60) + '\n');
+
+  // Trigger LED on UNO Q (real) or console fallback
+  if (led) {
+    try {
+      await led.on();
+    } catch (e) {
+      console.warn('[consensus] LED trigger failed:', e.message);
+    }
+  }
 }
 
 module.exports = { shouldTrigger, triggerEvent };
