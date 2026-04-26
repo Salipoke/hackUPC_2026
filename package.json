@@ -16,6 +16,8 @@
     "stop": "./start.sh stop",
     "status": "./start.sh status",
     "clean": "rm -rf datos-biomesh-* /tmp/biomesh-derive-*",
+    "dataset": "node scripts/generate-dataset.js",
+    "dataset:real": "BIOMESH_FETCH_OPENMETEO=1 node scripts/generate-dataset.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

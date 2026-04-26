@@ -38,6 +38,10 @@ dashboard/.vite/
 # *.h5
 # ai/models/*.bin
 
+# Generated datasets (regenerable via npm run dataset)
+ai/data/biomesh-train.csv
+ai/data/biomesh-test.csv
+
 # Temp / scratch
 *.tmp
 *.bak
