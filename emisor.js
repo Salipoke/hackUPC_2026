@@ -3,6 +3,7 @@ const Autobase = require('autobase');
 const Hyperswarm = require('hyperswarm');
 const sodium = require('sodium-universal');
 const { generateMockData } = require('./helper.js');
+const ai = require('./ai');
 
 // Args: [peerId] [baseKey?] [storeDir?]
 let PEER_ID = 'emisor-arduino-1';
@@ -85,12 +86,24 @@ async function iniciarNodo() {
     await base.update();
   }
 
+  // Local rolling history (per peer self) for AI trend analysis
+  const selfHistory = [];
+  const HISTORY_LIMIT = 20;
+
   setInterval(async () => {
     await base.update();
     if (base.writable) {
       const data = generateMockData(PEER_ID);
+
+      // Phase 1: AI verdict on own reading
+      data.verdict = ai.evaluate(data, selfHistory);
+
+      selfHistory.push(data);
+      if (selfHistory.length > HISTORY_LIMIT) selfHistory.shift();
+
       await base.append(data);
-      console.log('>>> SENT:', PEER_ID, data.temperature.toFixed(1), '°C');
+      const tag = data.verdict.risk === 'high' ? '!! HIGH RISK !!' : 'low';
+      console.log(`>>> SENT: ${PEER_ID} ${data.temperature.toFixed(1)}°C  verdict=${tag}  score=${data.verdict.score}`);
     } else {
       console.log('not writable yet, waiting...');
     }

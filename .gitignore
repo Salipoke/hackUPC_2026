@@ -1,5 +1,44 @@
-node_modules
+# Node
+node_modules/
 .env
-datos-biomesh-emisor
-datos-biomesh-observador
+.env.local
+.env.*.local
+package-lock.json.bak
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data (Autobase / Corestore stores)
+datos-biomesh-*/
+test-store/
+/tmp/biomesh-derive-*/
+
+# Pear runtime
+.pear/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Dashboard build artifacts
+dashboard/dist/
+dashboard/.vite/
+
+# AI model artifacts (binary, large) - keep model definitions in code, weights tracked separately if small
+# Uncomment if model weights become large:
+# *.tflite
+# *.onnx
+# *.h5
+# ai/models/*.bin
+
+# Temp / scratch
+*.tmp
+*.bak
+.DS_Store

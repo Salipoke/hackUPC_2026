@@ -18,6 +18,7 @@ const DHT = require('hyperdht');
 const Corestore = require('corestore');
 const Autobase = require('autobase');
 const Hyperswarm = require('hyperswarm');
+const ai = require('./ai');
 
 // WebSocket server para el dashboard
 const wss = new wssFunction({ port: 8080 });
@@ -74,6 +75,16 @@ else {
 async function conectar() {
   const store = new Corestore('./datos-biomesh-observador');
 
+  // Latest verdict per peer (used for consensus monitoring)
+  const verdictsByPeer = new Map();
+
+  function evaluateConsensus() {
+    const entries = [];
+    for (const [peerId, e] of verdictsByPeer) entries.push(e);
+    const decision = ai.shouldTrigger(entries);
+    return decision;
+  }
+
   async function apply(nodes, view, host) {
     for (const node of nodes) {
       const v = node.value;
@@ -82,8 +93,25 @@ async function conectar() {
         console.log('OBSERVADOR apply: addWriter', k.toString('hex').substring(0, 16), 'peerId:', v.peerId);
         try { await host.addWriter(k, { indexer: true }); } catch(e) { console.log('add fail:', e.message); }
       } else if (v) {
-        console.log('>>> RX:', v.peerId, v.temperature?.toFixed?.(1));
-        broadcast(v);
+        const verdictTag = v.verdict ? `verdict=${v.verdict.risk}` : 'no-verdict';
+        console.log('>>> RX:', v.peerId, v.temperature?.toFixed?.(1), verdictTag);
+
+        if (v.verdict && v.peerId) {
+          verdictsByPeer.set(v.peerId, {
+            peerId: v.peerId,
+            verdict: v.verdict,
+            timestamp: v.timestamp || Date.now()
+          });
+        }
+
+        // Broadcast reading + current consensus snapshot for dashboard
+        const decision = evaluateConsensus();
+        broadcast({ ...v, _consensus: decision });
+
+        if (decision.trigger) {
+          // Phase 2: observador prints alert. In production this would just be UI.
+          console.log(`[CONSENSUS] HIGH RISK consensus: ${decision.highCount}/${decision.totalPeers} (threshold ${decision.threshold})`);
+        }
       }
     }
   }
